@@ -1,0 +1,11 @@
+#bot-builder-box {
+    height: 10000px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    transform-origin: top left;
+    width: 10000px;
+    z-index: 1;
+    background-image: radial-gradient(rgb(40 66 117) 1px, transparent 0px);
+    background-size: 24px 24px;
+}
