@@ -57,7 +57,7 @@ Add this to your main configuration's modules array
 
 ```
     'modules' => [
-        'settings' => [
+        'BotBuilder' => [
             'class' => 'ZakharovAndrew\BotBuilder\Module',
             'bootstrapVersion' => 5, // if use bootstrap 5
         ],
