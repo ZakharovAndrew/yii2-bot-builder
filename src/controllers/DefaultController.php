@@ -39,12 +39,14 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new BotBuilderSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        /*$searchModel = new BotBuilderSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);*/
 
-        return $this->render('index', [
+        BotBuilderAsset::register($this->view); 
+
+        return $this->render('index', /*[
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-        ]);
+        ]*/);
     }
 }
