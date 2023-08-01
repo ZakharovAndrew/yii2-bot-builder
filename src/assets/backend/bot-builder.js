@@ -21,7 +21,23 @@ class BotBuilder  {
         this.box = this.el.querySelector("#bot-builder-box");
         
         this.setDefaultSettings();
+        console.log('Initial Bot Builder');
     }
+    
+    addSvgLine = (svg_element_id, path, color = "#5fe3ff") => {
+        var newpath = document.createElementNS('http://www.w3.org/2000/svg',"path");  
+        newpath.setAttributeNS(null, "id", svg_element_id);  
+        newpath.setAttributeNS(null, "d", path);  
+        newpath.setAttributeNS(null, "stroke", color); 
+        newpath.setAttributeNS(null, "stroke-width", 3);  
+        newpath.setAttributeNS(null, "opacity", 1);  
+        newpath.setAttributeNS(null, "fill", "none");
+        newpath.setAttributeNS(null, "class", "bot_line");
+        newpath.setAttributeNS(null, "marker-end", "url(#marker)");
+        document.getElementById("bot-builder__svg").appendChild(newpath);
+    }
+    
+    
     
     // calculate distance
     distance = (point1, point2) => {
