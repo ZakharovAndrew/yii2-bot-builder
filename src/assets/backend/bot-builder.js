@@ -6,6 +6,20 @@ class BotBuilder  {
         this.el = document.querySelector(name);
         this.blocks = {};
 
+        this.init();
+    }
+    
+    init = () => {
+        this.el.class = "bot-builder";
+        // 
+        this.el.innerHTML = ('<div id="bot-builder-box"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" height="10000" width="10000" id="bot-builder__svg">' + 
+            '<defs xmlns="http://www.w3.org/2000/svg"><marker markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" viewBox="0 0 5 5" orient="auto" id="marker"><polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" fill="#5fe3ff"/></marker>' +
+            '<marker markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" viewBox="0 0 5 5" orient="auto" id="marker-hover"><polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" fill="red"/></marker>' +
+            '<marker id="endarrow" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto" markerUnits="strokeWidth"><polygon points="0 0, 10 3.5, 0 7" fill="#5fe3ff" /></marker>' +
+            '<marker id="startarrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"> <polygon points="10 0, 10 7, 0 3.5" fill="#5fe3ff" /></marker></defs><line x1="0" y1="0" x2="0" y2="0" stroke-width="3" stroke-miterlimit="10" style="stroke-dasharray: 10 10;" stroke="#5fe3ff" marker-end="url(#marker)" id="line-link"/></svg></div>'
+        );
+        this.box = this.el.querySelector("#bot-builder-box");
+        
         this.setDefaultSettings();
     }
     
