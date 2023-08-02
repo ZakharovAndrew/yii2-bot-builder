@@ -10,21 +10,31 @@ class BotBuilder  {
     }
     
     init = () => {
+        this.setDefaultSettings();
+        
+        // set class to main object
         this.el.class = "bot-builder";
-        // 
+        
+        // create markers
+        let markers = '';
+        for (let i = 0; i < this.colors.length; i++) {
+            markers += '<marker markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" viewBox="0 0 5 5" orient="auto" id="marker' + i + '"><polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" fill="' + this.colors[i] + '"/></marker>';
+        }
+
+        // create main object
         this.el.innerHTML = ('<div id="bot-builder-box"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" height="10000" width="10000" id="bot-builder__svg">' + 
-            '<defs xmlns="http://www.w3.org/2000/svg"><marker markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" viewBox="0 0 5 5" orient="auto" id="marker"><polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" fill="#5fe3ff"/></marker>' +
+            '<defs xmlns="http://www.w3.org/2000/svg"><marker markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" viewBox="0 0 5 5" orient="auto" id="marker"><polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" fill="#5fe3ff"/></marker>' + markers +
             '<marker markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" viewBox="0 0 5 5" orient="auto" id="marker-hover"><polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" fill="red"/></marker>' +
             '<marker id="endarrow" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto" markerUnits="strokeWidth"><polygon points="0 0, 10 3.5, 0 7" fill="#5fe3ff" /></marker>' +
             '<marker id="startarrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"> <polygon points="10 0, 10 7, 0 3.5" fill="#5fe3ff" /></marker></defs><line x1="0" y1="0" x2="0" y2="0" stroke-width="3" stroke-miterlimit="10" style="stroke-dasharray: 10 10;" stroke="#5fe3ff" marker-end="url(#marker)" id="line-link"/></svg></div>'
         );
         this.box = this.el.querySelector("#bot-builder-box");
         
-        this.setDefaultSettings();
+        
         console.log('Initial Bot Builder');
     }
     
-    addSvgLine = (svg_element_id, path, color = "#5fe3ff") => {
+    addSvgLine = (svg_element_id, path, color = "#5fe3ff", color_id = '') => {
         var newpath = document.createElementNS('http://www.w3.org/2000/svg',"path");  
         newpath.setAttributeNS(null, "id", svg_element_id);  
         newpath.setAttributeNS(null, "d", path);  
@@ -33,7 +43,7 @@ class BotBuilder  {
         newpath.setAttributeNS(null, "opacity", 1);  
         newpath.setAttributeNS(null, "fill", "none");
         newpath.setAttributeNS(null, "class", "bot_line");
-        newpath.setAttributeNS(null, "marker-end", "url(#marker)");
+        newpath.setAttributeNS(null, "marker-end", "url(#marker"+color_id+")");
         document.getElementById("bot-builder__svg").appendChild(newpath);
     }
     
