@@ -33,6 +33,71 @@ class BotBuilder  {
         
         console.log('Initial Bot Builder');
     }
+
+    // set default settings for module
+    setDefaultSettings = () => {
+        //init colors
+        this.setColorList(['#2196F3', '#1a76c7', '#2351a1', '#5fe3ff', '#aa13eb', '#9b35c7', '#673ab7']);
+        
+        this.block_width = 245;
+    }
+    
+    // set new color list
+    setColorList = (arr) => {
+        this.colors = arr;
+    }
+
+    // draw a line between two blocks
+    drawLink = (link) => {
+        this.color_number++;
+
+        if (this.color_number > this.colors.length) {
+            this.color_number = 0;
+        }
+        
+        // first point
+        let point1 = $(".bot-card[data-id='"+link.id1+"']").find(".bot-card__item[data-id='"+link.item_id+"']").find(".bot-card__link").offset();
+        if(!point1) {
+            console.log('ERROR: NO POINT 1');
+            return;
+        }
+        
+        var parentOffset = $(this.el).offset();
+        var boxOffset = $(this.box).offset();
+    
+        var relX = point1.left - parentOffset.left + (parentOffset.left - boxOffset.left);
+        var relY = point1.top - parentOffset.top + (parentOffset.top - boxOffset.top);
+        var relX = parseInt($(".bot-card[data-id='"+link.id1+"']").css('left'))+230;
+        var relY = point1.top - parentOffset.top + (parentOffset.top - boxOffset.top);        
+        
+        let point2 = $(".bot-card[data-id="+link.id2+"]").offset();
+        if(!point2) {
+            console.log('ERROR: NO POINT 2');
+            return;
+        }
+        var relX2 = point2.left - parentOffset.left + (parentOffset.left - boxOffset.left);
+        var relY2 = point2.top - parentOffset.top + (parentOffset.top - boxOffset.top);
+    
+        let path = this.calculatePath({x: relX, y: relY+8}, {x: relX2-7, y: relY2+20});
+
+        // new line ID
+        let svg_element_id = "line-"+link.id1+'--'+link.item_id+"-"+link.id2;
+        
+        let el = $("#"+svg_element_id);
+
+        // if the element already exists, then it just needs to change the path
+        if ($("#"+svg_element_id).length) {
+            el.attr('d', path)
+        } else {
+            // add SVG line
+            if (this.coloried) {
+                console.log('this.color_number', this.color_number);
+                this.addSvgLine(svg_element_id, path, this.colors[this.color_number], this.color_number );
+                return;
+            }
+            this.addSvgLine(svg_element_id, path); 
+        }                
+    }
     
     addSvgLine = (svg_element_id, path, color = "#5fe3ff", color_id = '') => {
         var newpath = document.createElementNS('http://www.w3.org/2000/svg',"path");  
@@ -47,26 +112,40 @@ class BotBuilder  {
         document.getElementById("bot-builder__svg").appendChild(newpath);
     }
     
-    
-    
+    // modify line between connected blocks
+    changeLineStart = (x, y) => {
+        this.link_line.x1 = x;
+        this.link_line.y1 = y;
+    }
+
+    changeLineStop = (x, y) => {
+        this.link_line.x2 = x;
+        this.link_line.y2 = y;
+    }
+
+    // show/hide line between connected blocks
+    showLine = (show) => {
+        if (show) {
+            var parentOffset = $(this.el).offset();
+            var boxOffset = $(this.box).offset();
+            $("#line-link").attr("x1", this.link_line.x1 + (parentOffset.left - boxOffset.left));
+            $("#line-link").attr("x2", this.link_line.x2 + (parentOffset.left - boxOffset.left));
+            $("#line-link").attr("y1", this.link_line.y1 + (parentOffset.top - boxOffset.top));
+            $("#line-link").attr("y2", this.link_line.y2 + (parentOffset.top - boxOffset.top));
+            $("#line-link").show();
+            $(this.el).addClass('bot-builder-link');
+        } else {
+            $(this.el).removeClass('bot-builder-link');
+            $("#line-link").hide();
+        }
+    }
+
     // calculate distance
     distance = (point1, point2) => {
         const dx = point1.x - point2.x;
         const dy = point1.y - point2.y;
 
         return Math.sqrt(dx * dx + dy * dy);
-    }
-    
-    // set default settings for module
-    setDefaultSettings = () => {
-        //init colors
-        this.setColorList(['#2196F3', '#1a76c7', '#2351a1', '#5fe3ff', '#aa13eb', '#9b35c7', '#673ab7']);
-        
-        this.block_width = 245;
-    }
-    
-    setColorList = (arr) => {
-        this.colors = arr;
     }
     
     // Calculate the path of a line between two points
@@ -85,7 +164,7 @@ class BotBuilder  {
 
         const controlPoint = {
             x: start.x + Math.min(
-                distance(start, end),
+                this.distance(start, end),
                 Math.abs(end.y - start.y) / 2,
                 150
             ),
@@ -94,16 +173,16 @@ class BotBuilder  {
         
         if (flag) {
             return `
-                M \${start.x},\${start.y} 
-                C \${controlPoint.x}, \${controlPoint.y} \${controlPoint.x},\${center.y} 
-                \${end.x},\${end.y}
+                M ${start.x},${start.y} 
+                C ${controlPoint.x}, ${controlPoint.y} ${controlPoint.x},${center.y} 
+                ${end.x},${end.y}
               `;
         }
 
         return `
-            M \${start.x},\${start.y} 
-            Q \${controlPoint.x}, \${controlPoint.y} \${center.x},\${center.y} 
-            T \${end.x},\${end.y}
+            M ${start.x},${start.y} 
+            Q ${controlPoint.x}, ${controlPoint.y} ${center.x},${center.y} 
+            T ${end.x},${end.y}
         `;
     }
 }
