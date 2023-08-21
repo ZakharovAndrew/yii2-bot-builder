@@ -30,8 +30,56 @@ class BotBuilder  {
         );
         this.box = this.el.querySelector("#bot-builder-box");
         
-        
         console.log('Initial Bot Builder');
+    }
+    
+    // set default settings for module
+    setHooks = () => {
+        let self = this;
+        
+        // click to point link
+        $("body").on('mousedown', ".bot-card__point-link", function(e) {
+            var parentOffset = $("#bot-builder").offset(); 
+            var relX = e.pageX - parentOffset.left;
+            var relY = e.pageY - parentOffset.top;
+        
+            self.changeLineStart(relX, relY);
+            console.log('stoppropog3');
+            e.stopPropagation();
+            console.log('Start drag');
+            self.lineDrag = true;
+            let item_id = $(this).closest('.bot-card__item').data('id');
+            let id = $(this).closest('.bot-card').data('id');
+            console.log('start_line', item_id, id);
+        
+            self.setFirstCard(id, item_id);
+        
+            $(".bot-card:not([data-id="+id+"])").on('mouseup', function(e) {
+                let id = $(this).data('id');
+                self.setLink(id);
+                console.log('[НАДО СОЕДИНЯТЬ ДВЕ ТОЧКИ] card id= ', id);
+            });
+        });
+        
+        $("body").on('mousemove', function(e) {
+            if (self.lineDrag) {
+                let parentOffset = $("#bot-builder").offset();
+                let relX = e.pageX - parentOffset.left;
+                let relY = e.pageY - parentOffset.top;
+
+                self.changeLineStop(relX, relY);
+                self.showLine(true);
+            }
+        });
+        
+        // stop draw a line between two blocks
+        $("body").on('mouseup', function(e) {
+            self.lineDrag = false;
+            console.log('stop drag line');
+            console.log('cardHovered', cardHovered);
+            self.showLine(false);
+            $(".bot-card").off();
+        });
     }
 
     // set default settings for module
@@ -40,6 +88,7 @@ class BotBuilder  {
         this.setColorList(['#2196F3', '#1a76c7', '#2351a1', '#5fe3ff', '#aa13eb', '#9b35c7', '#673ab7']);
         
         this.block_width = 245;
+        this.lineDrag = false;
     }
     
     // set new color list
