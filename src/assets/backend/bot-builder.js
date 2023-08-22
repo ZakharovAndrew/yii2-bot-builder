@@ -211,6 +211,15 @@ class BotBuilder  {
         }
     }
 
+    deleteLink = (id1, item_id, id2) => {
+        if (item_id == 'default') {
+            this.blocks[id1].next_block_id = null;
+        } else {
+            this.blocks[id1].items[item_id].next_block_id = null;
+        }
+        $("#line-"+id1+'--'+item_id+"-"+id2).remove();
+    }
+
     // calculate distance
     distance = (point1, point2) => {
         const dx = point1.x - point2.x;
@@ -270,5 +279,5 @@ class BotBuilder  {
         for (let i = 0; i < callbacks.length; i++) {
             callbacks[i](...args)
         }
-  },
+    }
 }
