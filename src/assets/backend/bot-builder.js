@@ -76,9 +76,30 @@ class BotBuilder  {
         $("body").on('mouseup', function(e) {
             self.lineDrag = false;
             console.log('stop drag line');
-            console.log('cardHovered', cardHovered);
             self.showLine(false);
             $(".bot-card").off();
+        });
+
+        $(document).on('click', '.delete-block[data-id]', function(e) {
+            const id = $(this).data('id');
+            const block = window.Builder.blocks[id];
+            if (block) {
+                $('#confirm').off();
+                $('#confirm').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                })
+                .on('click', '#delete', function(e) {
+                    $('#confirm').modal('hide');
+                    self.deleteBlock(id);
+                });
+                $("#cancel").on('click',function(e){
+                    e.preventDefault();
+                    $('#confirm').modal.model('hide');
+                });
+            }
+            console.log('stoppropog2');
+            e.stopPropagation();
         });
     }
 
