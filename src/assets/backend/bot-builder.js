@@ -29,6 +29,7 @@ class BotBuilder  {
             '<marker id="startarrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"> <polygon points="10 0, 10 7, 0 3.5" fill="#5fe3ff" /></marker></defs><line x1="0" y1="0" x2="0" y2="0" stroke-width="3" stroke-miterlimit="10" style="stroke-dasharray: 10 10;" stroke="#5fe3ff" marker-end="url(#marker)" id="line-link"/></svg></div>'
         );
         this.box = this.el.querySelector("#bot-builder-box");
+        this.events = {};
         
         console.log('Initial Bot Builder Hooks');
         this.setHooks();
@@ -53,14 +54,12 @@ class BotBuilder  {
             self.lineDrag = true;
             let item_id = $(this).closest('.bot-card__item').data('id');
             let id = $(this).closest('.bot-card').data('id');
-            console.log('start_line', item_id, id);
         
             self.setFirstCard(id, item_id);
         
             $(".bot-card:not([data-id="+id+"])").on('mouseup', function(e) {
                 let id = $(this).data('id');
                 self.setLink(id);
-                console.log('[НАДО СОЕДИНЯТЬ ДВЕ ТОЧКИ] card id= ', id);
             });
         });
         
@@ -78,7 +77,6 @@ class BotBuilder  {
         // stop draw a line between two blocks
         $("body").on('mouseup', function(e) {
             self.lineDrag = false;
-            console.log('stop drag line');
             self.showLine(false);
             $(".bot-card").off();
         });
@@ -258,4 +256,19 @@ class BotBuilder  {
             T ${end.x},${end.y}
         `;
     }
+
+    // add event
+    on = (event, callback) => {
+        this.events[event]?.push(callback) || (this.events[event] = [callback])
+        return () => {
+            this.events[event] = this.events[event]?.filter(i => callback !== i)
+        }
+    }
+
+    emit = (event, ...args) => {
+        let callbacks = this.events[event] || []
+        for (let i = 0; i < callbacks.length; i++) {
+            callbacks[i](...args)
+        }
+  },
 }
