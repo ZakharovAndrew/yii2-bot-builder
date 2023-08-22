@@ -30,6 +30,9 @@ class BotBuilder  {
         );
         this.box = this.el.querySelector("#bot-builder-box");
         
+        console.log('Initial Bot Builder Hooks');
+        this.setHooks();
+        
         console.log('Initial Bot Builder');
     }
     
