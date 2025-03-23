@@ -4,7 +4,7 @@
 [![License](https://poser.pugx.org/zakharov-andrew/yii2-bot-builder/license)](https://packagist.org/packages/zakharov-andrew/yii2-bot-builder)
 [![Yii2](https://img.shields.io/badge/Powered_by-Yii_Framework-green.svg?style=flat)](http://www.yiiframework.com/)
 
-This extension allows you to add categories to your app.
+Yii2 Bot Builder. Module for creating a diagram of chat bots
 
 ## Installation
 
@@ -65,6 +65,16 @@ Add this to your main configuration's modules array
     ],
 ```
 
-## License
+## 👥 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
 
 **yii2-bot-builder** it is available under a MIT License. Detailed information can be found in the `LICENSE.md`. 
